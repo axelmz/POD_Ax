@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:c="sap.ui.core" xmlns:f="sap.f" xmlns:form="sap.ui.layout.form" xmlns:layout="sap.ui.layout" xmlns:t="sap.ui.table" xmlns:tnt="sap.tnt" xmlns:u="sap.ui.unified" controllerName="sap.ui.comp.sample.valuehelpdialog.singleSelect.ValueHelpDialogSingleSelect" height="100%">
+   <f:DynamicPage id="dynamicPageId" preserveHeaderStateOnScroll="true" headerExpanded="true">
+      <!-- DynamicPage Title -->
+      <f:title>
+         <f:DynamicPageTitle>
+            <f:heading>
+               <Image src="images/Galvasid_logo.png" />
+            </f:heading>
+            <f:expandedContent>
+               <FlexBox height="170px" alignItems="Start" justifyContent="Start">
+                  <items>
+                     <GenericTile class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" header="Velocidad" subheader="" press="press">
+                        <TileContent unit="{STATS&gt;/UM}" footer="">
+                           <NumericContent value="{STATS&gt;/VELOCIDAD}" icon="sap-icon://performance" withMargin="false" valueColor="Good" />
+                        </TileContent>
+                     </GenericTile>
+                     <GenericTile class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" header="Produccion" subheader="Vía 1" press="press">
+                        <TileContent unit="m" footer="">
+                           <NumericContent value="{STATS&gt;/PRODUCCION}" icon="sap-icon://measure" withMargin="false" valueColor="Good" />
+                        </TileContent>
+                     </GenericTile>
+                  </items>
+               </FlexBox>
+            </f:expandedContent>
+            <f:actions>
+               <ToolbarSpacer />
+               <Button icon="sap-icon://process" type="Emphasized" text="Iniciar Orden" press="onStartOrder" />
+               <Button icon="sap-icon://flag" type="Negative" text="Declarar Material" press="onCompletarSfc" />
+               <Button icon="sap-icon://org-chart" type="Success" text="Montar" press="onComponentesList" />
+               <Button icon="sap-icon://appointment-2" type="Critical" text="Pendiente" press="onPendiente" />
+               <Button icon="sap-icon://complete" type="Negative" text="Cerrar Orden" press="onCerrarOrden" />
+               <Button icon="sap-icon://appointment-2" type="Critical" text="Re-Abrir Orden" press="onReAbrirOrden" />
+               <Button icon="sap-icon://synchronize" tooltip="Recargar información" press="onRefreshOrders" />
+               <Button icon="sap-icon://log" tooltip="Cerrar Sesión" press="onCerrarSesion" />
+            </f:actions>
+         </f:DynamicPageTitle>
+      </f:title>
+      <!-- DynamicPage Header -->
+      <f:header>
+         <f:DynamicPageHeader pinnable="true">
+            <layout:HorizontalLayout allowWrapping="true">
+               <layout:VerticalLayout class="sapUiMediumMarginEnd">
+                  <tnt:InfoLabel text="{ path: 'STATS&gt;/PARO', formatter: '.formatter.activateText' }" displayOnly="true" colorScheme="{ parts: [ {path: 'STATS&gt;/PARO'} ], formatter: '.formatter.lineStop' }" />
+                  <Label id="username" text="" class="toolbar_color sapUiSmallMarginTop" />
+               </layout:VerticalLayout>
+            </layout:HorizontalLayout>
+            <FlexBox height="100px" alignItems="Center" justifyContent="Center">
+               <items>
+                  <form:SimpleForm editable="true" layout="ResponsiveGridLayout" labelSpanM="12" labelSpanL="12" labelSpanXL="12" emptySpanL="6" emptySpanM="6">
+                     <form:content>
+                        <Label text="Operación" labelFor="multiInput" />
+                        <Input id="input" showValueHelp="true" valueHelpOnly="true" valueHelpRequest=".onValueOperationRequested" suggestionItems="{ path: '/ITEMS', sorter: { path: 'WORK_CENTER' } }">
+                           <c:Item key="{WORK_CENTER}" text="{DESCRIPTION}" />
+                        </Input>
+                     </form:content>
+                  </form:SimpleForm>
+                  <form:SimpleForm editable="true" layout="ResponsiveGridLayout" labelSpanM="12" labelSpanL="12" labelSpanXL="12" emptySpanL="6" emptySpanM="6">
+                     <form:content>
+                        <Label text="Órdenes" labelFor="multiInput" />
+                        <Input id="input3" enabled="false" showValueHelp="true" valueHelpOnly="true" valueHelpRequest=".onValueOrdersRequested" suggestionItems="{ path: '/ITEMS', sorter: { path: 'Name' } }">
+                           <c:Item key="{SHOP_ORDER}" text="{SHOP_ORDER}" />
+                        </Input>
+                     </form:content>
+                  </form:SimpleForm>
+               </items>
+            </FlexBox>
+         </f:DynamicPageHeader>
+      </f:header>
+      <f:content>
+         <Table id="OrdersList" class="sapUiResponsiveMargin" mode="SingleSelectLeft" width="auto" items="{/ITEMS}">
+
+            <columns>
+               <Column minScreenWidth="Small" demandPopin="true">
+                  <Label text="Orden" />
+               </Column>
+               <Column minScreenWidth="Small" demandPopin="true">
+                  <Label text="Material" />
+               </Column>
+               <Column minScreenWidth="Small" demandPopin="true">
+                  <Label text="Descripción" />
+               </Column>
+               <Column minScreenWidth="Tablet" demandPopin="true">
+                  <Label text="Fecha Inicio" />
+               </Column>
+               <Column minScreenWidth="Tablet" demandPopin="true">
+                  <Label text="Prox. Proceso" />
+               </Column>
+               <Column minScreenWidth="Tablet" demandPopin="false">
+                  <Label text="Planeada" />
+               </Column>
+               <Column minScreenWidth="Tablet" demandPopin="false">
+                  <Label text="Producida" />
+               </Column>
+               <Column minScreenWidth="Small" demandPopin="false">
+                  <Label text="Faltante" />
+               </Column>
+               <Column minScreenWidth="Small" demandPopin="false">
+                  <Label text="Cliente" />
+               </Column>
+               <Column minScreenWidth="Small" demandPopin="false">
+                  <Label text="Características" />
+               </Column>
+               <Column minScreenWidth="Small" demandPopin="false">
+                  <Label text="Status" />
+               </Column>
+            </columns>
+            <items>
+               <ColumnListItem>               
+                  <cells>
+                     <Text text="{SHOP_ORDER}" />
+                     <Text text="{MATERIAL}" />
+                     <Text text="{DESCRIPTION}" />
+                     <Text text="{ACTUAL_START_DATE}" />
+                     <Text text="{NEXT_PROC}" />
+                     <ObjectNumber number="{QTY_TO_BUILD}" unit="Kg" />
+                     <ObjectNumber number="{QTY_DONE}" unit="Kg" />
+                     <ObjectNumber number="{
+                        parts: [ 
+                        {path: 'QTY_TO_BUILD'}, 
+                        {path: 'QTY_DONE'}
+                        ], 
+                        formatter: '.formatter.faltante' }" 
+                        unit="Kg" />
+                     <Text text="{CLIENTE}" />
+                     <Button icon="sap-icon://detail-view" text="" type="Default" tooltip="Ver Características" press="onVerCaracteristicas" />
+                     <tnt:InfoLabel text="{ path: 'ESTATUS', formatter: '.formatter.orderText' }" displayOnly="true" colorScheme="{ parts: [ {path: 'ESTATUS'} ], formatter: '.formatter.availableState' }" />
+                  </cells>
+               </ColumnListItem>
+            </items>
+         </Table>
+      </f:content>
+      <!-- DynamicPage Footer -->
+      <f:footer>
+         <OverflowToolbar id="otbFooter">
+            <Button icon="sap-icon://activities" type="Transparent" text="Rollos Consumidos" id="button_rollosConsumidos" press="onRollosConsumidos" />
+            <Button icon="sap-icon://activate" type="Transparent" text="Rollos Disponibles" id="button_rollosDisponibles" press="onVerRollosDisponibles" />
+            <!--
+<Button
+icon = "sap-icon://lab"
+type = "Success"
+text = "Insumos Consumidos"
+press = "onVerInsumosConsumidos"/>
+-->
+            <Button icon="sap-icon://add-process" type="Critical" text="Generar CP" id="button_generateCP_paila" press="onValidateCreateSFC_alone" />
+            <Button icon="sap-icon://journey-arrive" type="Critical" text="Declarar Dross" id="button_declararDross_paila" press="onModalDross" />
+            <Button icon="sap-icon://bullet-text" type="Critical" text="Ajustar Stock" id="button_adjust" press="onAdjust" /> 
+            <ToolbarSpacer />
+            <Button icon="sap-icon://flag" type="Transparent" text="Activar Orden" press="onActivarOrden" id="button_activarOrden" />
+            <Button icon="sap-icon://delete" type="Transparent" text="Mermas" press="onReporteMermas" />
+            <Button icon="sap-icon://legend" type="Transparent" text="Instalado" press="onRollosInstalados" />
+            <Button icon="sap-icon://table-column" type="Transparent" text="Reporte" press="onReporteProduccion" />
+         </OverflowToolbar>
+      </f:footer>
+   </f:DynamicPage>
+</mvc:View>

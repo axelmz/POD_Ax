@@ -1,0 +1,14 @@
+<core:FragmentDefinition
+	xmlns="sap.ui.comp.valuehelpdialog"
+	xmlns:core="sap.ui.core">
+	<ValueHelpDialog
+		title="Ordenes"
+		ok=".onValueHelpOrdersOkPress"
+		cancel=".onValueHelpOrdersCancelPress"
+		afterClose=".onValueHelpOrdersAfterClose"
+		supportMultiselect="false"
+		key="SHOP_ORDER"
+		descriptionKey="SHOP_ORDER"
+	>
+	</ValueHelpDialog>
+</core:FragmentDefinition>
